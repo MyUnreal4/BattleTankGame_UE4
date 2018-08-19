@@ -78,3 +78,5 @@ DerivedDataCache/*
 
 # Ignore starter content
 Content/StarterContent/*
+# Ignore custom content
+Content/ImprovedTank/*
