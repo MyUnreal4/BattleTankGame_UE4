@@ -5,8 +5,17 @@
 void ATankPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
-	FString PossessedTank = GetControlledTank()->GetName();
-	UE_LOG(LogTemp, Warning, TEXT("%s"), *PossessedTank);
+	
+	if (GetControlledTank()) {
+		FString PossessedTank = GetControlledTank()->GetName();
+		UE_LOG(LogTemp, Warning, 
+			TEXT("Hello from TankPlayerController. Possessed tank: %s"), *PossessedTank);
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning,
+			TEXT("TankPlayerController not possessing a tank."));
+	}
 }
 
 ATank * ATankPlayerController::GetControlledTank() const
