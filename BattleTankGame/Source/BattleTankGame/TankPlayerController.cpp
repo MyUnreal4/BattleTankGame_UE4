@@ -23,8 +23,6 @@ void ATankPlayerController::BeginPlay()
 void ATankPlayerController::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	/*UE_LOG(LogTemp, Warning,
-		TEXT("Tick"));*/
 	AimTowardsCrosshair();
 }
 
@@ -42,8 +40,7 @@ void ATankPlayerController::AimTowardsCrosshair()
 	FVector OutHitLocation; // Out parameter
 	if (GetSightRayHitLocation(OutHitLocation))
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Hit location : %s"), *OutHitLocation.ToString());
-		//TODO tell the controlled tank to aim at that point
+		GetControlledTank()->AimAt(OutHitLocation);
 	}
 }
 
@@ -67,6 +64,7 @@ bool ATankPlayerController::GetSightRayHitLocation(FVector & OutHitLocation) con
 	return false;
 }
 
+//Find our sight vector
 bool ATankPlayerController::GetLookDirection(FVector2D &ScreenLocation, FVector &OutWorldDirection) const
 {
 	FVector OutCameraWorldLocation;
@@ -77,6 +75,7 @@ bool ATankPlayerController::GetLookDirection(FVector2D &ScreenLocation, FVector 
 		OutWorldDirection);
 }
 
+//Find the actual point in the world where crosshair aims
 bool ATankPlayerController::GetLookVectorHitLocation(FVector & LookDirection, FVector& OutHitLocation) const
 {
 	FHitResult HitObject;
@@ -90,7 +89,6 @@ bool ATankPlayerController::GetLookVectorHitLocation(FVector & LookDirection, FV
 	))
 	{
 		OutHitLocation = HitObject.Location;
-		UE_LOG(LogTemp, Warning, TEXT("INSIDE Hit location : %s"), *OutHitLocation.ToString());
 		return true;
 	}
 	return false;
