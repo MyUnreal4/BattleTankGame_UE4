@@ -15,16 +15,6 @@ UTankAimingComponent::UTankAimingComponent()
 	// ...
 }
 
-
-// Called when the game starts
-void UTankAimingComponent::BeginPlay()
-{
-	Super::BeginPlay();
-
-	// ...
-	
-}
-
 void UTankAimingComponent::AimAt(FVector WorldSpaceAim, float LaunchSpeed) const
 {
 	if (!Barrel)
@@ -32,18 +22,10 @@ void UTankAimingComponent::AimAt(FVector WorldSpaceAim, float LaunchSpeed) const
 		UE_LOG(LogTemp, Warning, TEXT("Tank's barrel is not found"));
 		return; 
 	}
-	FString CurrentTankName = GetOwner()->GetName();
-	FVector BarrelLocation = Barrel->GetComponentLocation();
-	/*UE_LOG(LogTemp, Warning, TEXT("%s Aim at : %s from: %s"),
-			*CurrentTankName, 
-			*WorldSpaceAim.ToString(),
-			*BarrelLocation.ToString()
-			);
-	UE_LOG(LogTemp, Warning, TEXT("Launch speed %f cm/s"), LaunchSpeed);*/
 
 	FVector OutLaunchVelocity = FVector(0);
 	FVector StartLocation = Barrel->GetSocketLocation(FName("Projectile"));
-	if (UGameplayStatics::SuggestProjectileVelocity(
+	bool bHaveAimSolution = UGameplayStatics::SuggestProjectileVelocity(
 		this,
 		OutLaunchVelocity,
 		StartLocation,
@@ -53,18 +35,15 @@ void UTankAimingComponent::AimAt(FVector WorldSpaceAim, float LaunchSpeed) const
 		0,
 		0,
 		ESuggestProjVelocityTraceOption::DoNotTrace
-	))
+	);
+	if (bHaveAimSolution)
 	{
 		FVector AimDirection = OutLaunchVelocity.GetSafeNormal();
-		UE_LOG(LogTemp, Warning, TEXT("Aim Direction: %s"), *AimDirection.ToString());
-	}
-	else
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Cannot find AIM DIRECTION"));
+		MoveBarrelTowards(AimDirection);
 	}
 }
 
-void UTankAimingComponent::SetBarrelReference(UStaticMeshComponent * BarrelToSet)
+void UTankAimingComponent::SetBarrelReference(UTankBarrel * BarrelToSet)
 {
 	if (BarrelToSet)
 	{
@@ -72,12 +51,12 @@ void UTankAimingComponent::SetBarrelReference(UStaticMeshComponent * BarrelToSet
 	}
 }
 
-
-// Called every frame
-void UTankAimingComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
+void UTankAimingComponent::MoveBarrelTowards(FVector AimDirection) const
 {
-	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-
-	// ...
+	//find barral current position
+	FRotator BarrelRotator = Barrel->GetForwardVector().Rotation();
+	FRotator AimAsRotator = AimDirection.Rotation();
+	UE_LOG(LogTemp, Warning, TEXT("Aim as rotator: %s"), *AimAsRotator.ToString());
+	//move barrel to have the same vector as AimDirection
 }
 
