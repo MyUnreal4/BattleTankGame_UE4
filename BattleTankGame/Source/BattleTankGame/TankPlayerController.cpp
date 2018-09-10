@@ -1,6 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "TankPlayerController.h"
+#include "Tank.h"
 #include "Engine/World.h"
 
 void ATankPlayerController::BeginPlay()
@@ -17,7 +18,6 @@ void ATankPlayerController::BeginPlay()
 		UE_LOG(LogTemp, Warning,
 			TEXT("TankPlayerController not possessing a tank."));
 	}
-	AimTowardsCrosshair();
 }
 
 void ATankPlayerController::Tick(float DeltaTime)
@@ -55,11 +55,8 @@ bool ATankPlayerController::GetSightRayHitLocation(FVector & OutHitLocation) con
 	ScreenLocation.Y = ViewportSizeY * CrossHairYLocation;
 	FVector OutLookDirection;
 	if(GetLookDirection(ScreenLocation, OutLookDirection))
-	{
-		if (GetLookVectorHitLocation(OutLookDirection, OutHitLocation))
-		{
-			return true;
-		}
+	{// Line-trace along that LookDirection, and see what we hit (up to max range)
+		return GetLookVectorHitLocation(OutLookDirection, OutHitLocation);
 	}
 	return false;
 }
@@ -81,15 +78,19 @@ bool ATankPlayerController::GetLookVectorHitLocation(FVector & LookDirection, FV
 	FHitResult HitObject;
 	FVector StartLineTrace = PlayerCameraManager->GetCameraLocation();
 	FVector EndLineTrace = StartLineTrace + (LookDirection * LineTraceRange);
+	FCollisionQueryParams Params;
+	Params.AddIgnoredActor(GetPawn());
 	if (GetWorld()->LineTraceSingleByChannel(
 		HitObject,
 		StartLineTrace,
 		EndLineTrace,
-		ECollisionChannel::ECC_Visibility
+		ECollisionChannel::ECC_Visibility,
+		Params
 	))
 	{
 		OutHitLocation = HitObject.Location;
 		return true;
 	}
-	return false;
+	OutHitLocation = FVector(0);
+	return false; // Line trace didn't succeed
 }
