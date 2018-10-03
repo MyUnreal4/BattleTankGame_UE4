@@ -78,7 +78,9 @@ bool ATankPlayerController::GetLookVectorHitLocation(FVector & LookDirection, FV
 	FHitResult HitObject;
 	FVector StartLineTrace = PlayerCameraManager->GetCameraLocation();
 	FVector EndLineTrace = StartLineTrace + (LookDirection * LineTraceRange);
-	FCollisionQueryParams Params;
+	FName TraceTag("TraceTag");
+	FCollisionQueryParams Params(TraceTag);
+	//GetWorld()->DebugDrawTraceTag = TraceTag; // TODO remove debug line
 	Params.AddIgnoredActor(GetPawn());
 	if (GetWorld()->LineTraceSingleByChannel(
 		HitObject,
@@ -91,6 +93,6 @@ bool ATankPlayerController::GetLookVectorHitLocation(FVector & LookDirection, FV
 		OutHitLocation = HitObject.Location;
 		return true;
 	}
-	OutHitLocation = FVector(0);
+	OutHitLocation = FVector(0.0f);
 	return false; // Line trace didn't succeed
 }

@@ -33,5 +33,5 @@ public:
 private:
 	UTankBarrel* Barrel = nullptr;
 	UPROPERTY(EditAnywhere, Category = Firing)
-	float LaunchSpeed = 5000.0f;// TODO find sensible default value
+	float LaunchSpeed = 4000.0f;
 };

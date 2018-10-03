@@ -65,8 +65,8 @@ void UTankAimingComponent::MoveBarrelTowards(FVector AimDirection) const
 	//find barral current position
 	FRotator BarrelRotator = Barrel->GetForwardVector().Rotation();
 	FRotator AimAsRotator = AimDirection.Rotation();
+	FRotator DeltaRotator = AimAsRotator - BarrelRotator;
 	UE_LOG(LogTemp, Warning, TEXT("Aim as rotator: %s"), *AimAsRotator.ToString());
 	//move barrel to have the same vector as AimDirection
-	Barrel->Elevate(1.0f); //TODO remove hardcoded value
+	Barrel->Elevate(DeltaRotator.Pitch);
 }
-
