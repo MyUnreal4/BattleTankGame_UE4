@@ -42,4 +42,6 @@ private:
 	float LaunchSpeed = 4000.0f;
 	UPROPERTY(EditAnywhere, Category = Setup)
 	TSubclassOf<AProjectile> ProjectileBlueprint; //Alternative UClass* is NOT safe
+	double ReloadTimeInSeconds = 3.0;
+	double LastFireTime = 0.0;
 };

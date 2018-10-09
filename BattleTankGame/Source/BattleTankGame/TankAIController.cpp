@@ -21,7 +21,7 @@ void ATankAIController::Tick(float DeltaTime)
 		AimTowardsCrosshair();
 	}
 	//Fire if ready
-
+	Cast<ATank>(GetPawn())->Fire();
 }
 
 void ATankAIController::AimTowardsCrosshair()
