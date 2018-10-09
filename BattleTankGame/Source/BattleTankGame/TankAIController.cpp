@@ -9,26 +9,6 @@ void ATankAIController::BeginPlay()
 {
 	Super::BeginPlay();
 
-	if (GetControlledTank()) {
-		FString PossessedTank = GetControlledTank()->GetName();
-		UE_LOG(LogTemp, Warning,
-			TEXT("Hello from TankAIController. Possessed tank: %s"), *PossessedTank);
-	}
-	else
-	{
-		UE_LOG(LogTemp, Warning,
-			TEXT("TankAIController not possessing a tank."));
-	}
-	if (GetPlayerTank())
-	{
-		UE_LOG(LogTemp, Warning,
-			TEXT("Player tank detected. ID: %s"), *GetPlayerTank()->GetName());
-	}
-	else
-	{
-		UE_LOG(LogTemp, Error,
-			TEXT("Cannot find player tank"));
-	}
 }
 
 void ATankAIController::Tick(float DeltaTime)
@@ -36,36 +16,19 @@ void ATankAIController::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 	//TODO move towards the player
 	//Aim towards the player
-	if (GetPlayerTank())
+	if (GetWorld()->GetFirstPlayerController()->GetPawn())
 	{
 		AimTowardsCrosshair();
 	}
 	//Fire if ready
-}
 
-ATank * ATankAIController::GetControlledTank() const
-{
-	return Cast<ATank>(GetPawn());
-}
-
-ATank * ATankAIController::GetPlayerTank() const
-{
-	APlayerController* PlayerController = GetWorld()->GetFirstPlayerController();
-	if (PlayerController != nullptr)
-	{
-		AActor* PlayerTank = PlayerController->GetPawn();
-		if (PlayerTank != nullptr)
-		{
-			return Cast<ATank>(PlayerTank);
-		}
-	}
-	return nullptr;
 }
 
 void ATankAIController::AimTowardsCrosshair()
 {
-	if (GetControlledTank())
+	if (GetPawn())
 	{
-		GetControlledTank()->AimAt(GetPlayerTank()->GetActorLocation());
+		Cast<ATank>(GetPawn())->AimAt(
+			GetWorld()->GetFirstPlayerController()->GetPawn()->GetActorLocation());
 	}
 }
