@@ -23,11 +23,11 @@ class BATTLETANKGAME_API ATankPlayerController : public APlayerController
 	ATank* GetControlledTank() const;
 	void AimTowardsCrosshair();
 private:
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditDefaultsOnly)
 	float CrossHairXLocation = 0.5f;
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditDefaultsOnly)
 	float CrossHairYLocation = 0.33333f;
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditDefaultsOnly)
 	float LineTraceRange = 1000000.0f;// in cm
 
 	bool GetSightRayHitLocation(FVector& OutHitLocation) const;
