@@ -8,9 +8,11 @@
 
 // Forward declaration
 class UTankAimingComponent;
+class UTankMovementComponent;
 class UTankBarrel;
 class UTankTurret;
 class AProjectile;
+
 
 UCLASS()
 class BATTLETANKGAME_API ATank : public APawn
@@ -32,6 +34,8 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 	UTankAimingComponent* TankAimingComponent = nullptr;
+	UPROPERTY(BlueprintReadOnly)
+	UTankMovementComponent* TankMovementComponent = nullptr;
 
 public:	
 	// Called to bind functionality to input
