@@ -20,4 +20,6 @@ class BATTLETANKGAME_API ATankAIController : public AAIController
 	virtual void Tick(float DeltaTime) override;
 private:
 	void AimTowardsCrosshair();
+	UPROPERTY(EditDefaultsOnly, Category = Setup)
+	float AcceptanceRadius = 3000.0f; //cm
 };

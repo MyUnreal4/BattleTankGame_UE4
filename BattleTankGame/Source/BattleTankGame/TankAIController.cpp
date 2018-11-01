@@ -14,14 +14,18 @@ void ATankAIController::BeginPlay()
 void ATankAIController::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	//TODO move towards the player
-	//Aim towards the player
-	if (GetWorld()->GetFirstPlayerController()->GetPawn())
+	auto PlayerTank = GetWorld()->GetFirstPlayerController()->GetPawn();
+	auto ControlledTank = Cast<ATank>(GetPawn());
+	
+	if (PlayerTank)
 	{
+		//Move towards the player
+		MoveToActor(PlayerTank, AcceptanceRadius);
+		//Aim towards the player
 		AimTowardsCrosshair();
+		//Fire if ready
+		ControlledTank->Fire();
 	}
-	//Fire if ready
-	Cast<ATank>(GetPawn())->Fire();
 }
 
 void ATankAIController::AimTowardsCrosshair()
