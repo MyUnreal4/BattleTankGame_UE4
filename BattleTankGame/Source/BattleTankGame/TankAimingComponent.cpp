@@ -54,16 +54,13 @@ void UTankAimingComponent::AimAt(FVector WorldSpaceAim, float LaunchSpeed) const
 	}
 }
 
-void UTankAimingComponent::SetBarrelReference(UTankBarrel * BarrelToSet)
+void UTankAimingComponent::Initialise(UTankBarrel * BarrelToSet, UTankTurret * TurretToSet)
 {
 	if (BarrelToSet)
 	{
 		Barrel = BarrelToSet;
+		Cast<ATank>(GetOwner())->SetAimingComponent(this);
 	}
-}
-
-void UTankAimingComponent::SetTurretReference(UTankTurret * TurretToSet)
-{
 	if (TurretToSet)
 	{
 		Turret = TurretToSet;
@@ -72,6 +69,7 @@ void UTankAimingComponent::SetTurretReference(UTankTurret * TurretToSet)
 
 void UTankAimingComponent::MoveBarrelTowards(FVector AimDirection) const
 {
+	if (!Barrel || !Turret) { return; }
 	//find barral current position
 	FRotator BarrelRotator = Barrel->GetForwardVector().Rotation();
 	FRotator TurretRotator = Turret->GetForwardVector().Rotation();

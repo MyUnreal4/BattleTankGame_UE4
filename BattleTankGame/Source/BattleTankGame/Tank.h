@@ -24,9 +24,7 @@ public:
 	ATank();
 	void AimAt(FVector HitLocation);
 	UFUNCTION(BlueprintCallable, Category = Setup)
-	void SetBarrelReference(UTankBarrel* BarrelToSet);
-	UFUNCTION(BlueprintCallable, Category = Setup)
-	void SetTurretReference(UTankTurret* TurretToSet);
+	void SetAimingComponent(UTankAimingComponent* AimingComponentToSet);
 	UFUNCTION(BlueprintCallable, Category = Setup)
 	void Fire();
 
