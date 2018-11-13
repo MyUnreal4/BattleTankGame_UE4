@@ -4,19 +4,19 @@
 #include "Tank.h"
 #include "Engine/World.h"
 
+class UTankAimingComponent;
+
 void ATankPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	if (GetControlledTank()) {
-		FString PossessedTank = GetControlledTank()->GetName();
-		UE_LOG(LogTemp, Warning, 
-			TEXT("Hello from TankPlayerController. Possessed tank: %s"), *PossessedTank);
+	if(auto AimingComponent = GetControlledTank()->FindComponentByClass<UTankAimingComponent>())
+	{
+		FoundAimingComponent(AimingComponent); 
 	}
 	else
 	{
-		UE_LOG(LogTemp, Warning,
-			TEXT("TankPlayerController not possessing a tank."));
+		UE_LOG(LogTemp, Warning, TEXT("Player cotroller cannot find AimingComponent!"));
 	}
 }
 

@@ -4,7 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/NavMovementComponent.h"
+#include "Sound/SoundCue.h"
+#include "Runtime/CoreUObject/Public/UObject/ConstructorHelpers.h"
 #include "TankMovementComponent.generated.h"
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FAcceleration);
 
 ///Forward declarations
 class UTankTrack;
@@ -27,6 +31,10 @@ public:
 	UFUNCTION(BlueprintCallable, Category = Setup)
 	void Initialise(UTankTrack* LeftTrackToSet, UTankTrack* RightTrackToSet);
 	void RequestDirectMove(const FVector& MoveVelocity, bool bForceMaxSpeed) override;
+
+protected:
+	UPROPERTY(BlueprintAssignable)
+	FAcceleration Accelerate;
 
 private:
 	UTankTrack* LeftTrack = nullptr;

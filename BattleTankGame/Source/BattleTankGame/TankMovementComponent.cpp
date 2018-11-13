@@ -4,12 +4,14 @@
 #include "TankMovementComponent.h"
 #include "TankTrack.h"
 
+
 void UTankMovementComponent::IntendMoveForward(float Throw)
 {
 	if (LeftTrack && RightTrack)
 	{
 		LeftTrack->SetThrottle(Throw);
 		RightTrack->SetThrottle(Throw);
+		if (Throw != 0.0) Accelerate.Broadcast();
 	}
 }
 
@@ -19,6 +21,7 @@ void UTankMovementComponent::IntendMoveLeft(float Throw)
 	{
 		LeftTrack->SetThrottle(-Throw);
 		RightTrack->SetThrottle(Throw);
+		if (Throw != 0.0) Accelerate.Broadcast();
 	}
 }
 
@@ -39,6 +42,6 @@ void UTankMovementComponent::RequestDirectMove(const FVector & MoveVelocity, boo
 	float MoveForwardVelocity = FVector::DotProduct(TankForwardVector, AIForwardIntention);
 	IntendMoveForward(MoveForwardVelocity);
 
-	float RightThrowVelocity = FVector::CrossProduct(TankForwardVector, AIForwardIntention).Z;
+	float RightThrowVelocity = FVector::CrossProduct(AIForwardIntention, TankForwardVector).Z;
 	IntendMoveLeft(RightThrowVelocity);
 }

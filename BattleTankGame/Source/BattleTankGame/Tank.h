@@ -35,10 +35,14 @@ protected:
 	UTankAimingComponent* TankAimingComponent = nullptr;
 	UPROPERTY(BlueprintReadOnly)
 	UTankMovementComponent* TankMovementComponent = nullptr;
+	UFUNCTION(BlueprintImplementableEvent, Category = Setup)
+	void FiringEvent();
+	UFUNCTION(BlueprintImplementableEvent, Category = Setup)
+	void ReloadingEvent();
 
 public:	
 	// Called to bind functionality to input
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;	
+	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 private:
 	UTankBarrel* Barrel = nullptr;// local reference for spawning projectile
 	UPROPERTY(EditDefaultsOnly, Category = Firing)
