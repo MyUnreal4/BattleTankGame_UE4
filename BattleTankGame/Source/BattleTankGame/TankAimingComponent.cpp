@@ -20,11 +20,7 @@ UTankAimingComponent::UTankAimingComponent()
 
 void UTankAimingComponent::AimAt(FVector WorldSpaceAim, float LaunchSpeed) const
 {
-	if (!Barrel || !Turret)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Tank's barrel or turret is not found"));
-		return;
-	}
+	if (!ensure(Barrel) || !ensure(Turret)){ return; }
 
 	FVector OutLaunchVelocity = FVector(0);
 	FVector StartLocation = Barrel->GetSocketLocation(FName("Projectile"));
@@ -42,15 +38,12 @@ void UTankAimingComponent::AimAt(FVector WorldSpaceAim, float LaunchSpeed) const
 	if (bHaveAimSolution)
 	{
 		float Time = GetWorld()->GetTimeSeconds();
-		UE_LOG(LogTemp, Warning, TEXT("%f: Aim found"), Time);
-
 		FVector AimDirection = OutLaunchVelocity.GetSafeNormal();
 		MoveBarrelTowards(AimDirection);
 	}
 	else
 	{
 		float Time = GetWorld()->GetTimeSeconds();
-		UE_LOG(LogTemp, Warning, TEXT("%f: No Solution Found"), Time);
 	}
 }
 
@@ -69,13 +62,12 @@ void UTankAimingComponent::Initialise(UTankBarrel * BarrelToSet, UTankTurret * T
 
 void UTankAimingComponent::MoveBarrelTowards(FVector AimDirection) const
 {
-	if (!Barrel || !Turret) { return; }
+	if (!ensure(Barrel) || !ensure(Turret)) { return; }
 	//find barral current position
 	FRotator BarrelRotator = Barrel->GetForwardVector().Rotation();
 	FRotator TurretRotator = Turret->GetForwardVector().Rotation();
 	FRotator AimAsRotator = AimDirection.Rotation();
 	FRotator DeltaRotator = AimAsRotator - BarrelRotator;
-	UE_LOG(LogTemp, Warning, TEXT("Aim as rotator: %s"), *AimAsRotator.ToString());
 	//move barrel & turret to have the same vector as AimDirection
 	Barrel->Elevate(DeltaRotator.Pitch);
 	//always yaw the shortest way

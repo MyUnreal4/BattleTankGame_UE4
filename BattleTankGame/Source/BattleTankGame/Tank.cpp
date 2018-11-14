@@ -32,8 +32,10 @@ void ATank::SetAimingComponent(UTankAimingComponent* AimingComponentToSet)
 
 void ATank::Fire()
 {
+	if (!ensure(Barrel)) { return; }
 	bool isReload = (FPlatformTime::Seconds() - LastFireTime) > ReloadTimeInSeconds;
-	if (Barrel && isReload)
+
+	if (isReload)
 	{
 		// Spawning projectile at the socet location on the barrel
 		auto Projectile = GetWorld()->SpawnActor<AProjectile>(
@@ -45,7 +47,7 @@ void ATank::Fire()
 		FiringEvent();
 		LastFireTime = FPlatformTime::Seconds();
 	}
-	else if (Barrel && !isReload)
+	else
 	{
 		ReloadingEvent();
 	}
