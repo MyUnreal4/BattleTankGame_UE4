@@ -8,7 +8,6 @@
 
 // Forward declaration
 class UTankAimingComponent;
-class UTankMovementComponent;
 class UTankBarrel;
 class UTankTurret;
 class AProjectile;
@@ -33,8 +32,6 @@ protected:
 	virtual void BeginPlay() override;
 	UPROPERTY(BlueprintReadOnly)
 	UTankAimingComponent* TankAimingComponent = nullptr;
-	UPROPERTY(BlueprintReadOnly)
-	UTankMovementComponent* TankMovementComponent = nullptr;
 	UFUNCTION(BlueprintImplementableEvent, Category = Setup)
 	void FiringEvent();
 	UFUNCTION(BlueprintImplementableEvent, Category = Setup)
