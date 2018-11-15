@@ -18,7 +18,7 @@ UTankAimingComponent::UTankAimingComponent()
 	// ...
 }
 
-void UTankAimingComponent::AimAt(FVector WorldSpaceAim, float LaunchSpeed) const
+void UTankAimingComponent::AimAt(FVector WorldSpaceAim) const
 {
 	if (!ensure(Barrel) || !ensure(Turret)){ return; }
 
@@ -52,7 +52,6 @@ void UTankAimingComponent::Initialise(UTankBarrel * BarrelToSet, UTankTurret * T
 	if (BarrelToSet)
 	{
 		Barrel = BarrelToSet;
-		Cast<ATank>(GetOwner())->SetAimingComponent(this);
 	}
 	if (TurretToSet)
 	{

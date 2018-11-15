@@ -7,7 +7,6 @@
 #include "Tank.generated.h"
 
 // Forward declaration
-class UTankAimingComponent;
 class UTankBarrel;
 class UTankTurret;
 class AProjectile;
@@ -21,17 +20,12 @@ class BATTLETANKGAME_API ATank : public APawn
 public:
 	// Sets default values for this pawn's properties
 	ATank();
-	void AimAt(FVector HitLocation);
-	UFUNCTION(BlueprintCallable, Category = Setup)
-	void SetAimingComponent(UTankAimingComponent* AimingComponentToSet);
 	UFUNCTION(BlueprintCallable, Category = Setup)
 	void Fire();
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-	UPROPERTY(BlueprintReadOnly)
-	UTankAimingComponent* TankAimingComponent = nullptr;
 	UFUNCTION(BlueprintImplementableEvent, Category = Setup)
 	void FiringEvent();
 	UFUNCTION(BlueprintImplementableEvent, Category = Setup)
@@ -42,7 +36,7 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 private:
 	UTankBarrel* Barrel = nullptr;// local reference for spawning projectile
-	UPROPERTY(EditDefaultsOnly, Category = Firing)
+	UPROPERTY(EditDefaultsOnly, Category = Firing)//TODO Two copies of this parameter
 	float LaunchSpeed = 4000.0f;
 	UPROPERTY(EditDefaultsOnly, Category = Setup)
 	TSubclassOf<AProjectile> ProjectileBlueprint; //Alternative UClass* is NOT safe

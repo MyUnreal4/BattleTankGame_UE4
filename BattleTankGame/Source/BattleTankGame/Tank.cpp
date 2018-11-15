@@ -2,8 +2,8 @@
 
 #include "Tank.h"
 #include "TankAimingComponent.h"
-#include "Engine/World.h"
 #include "TankBarrel.h"
+#include "Engine/World.h"
 #include "Projectile.h"
 
 class UTankTurret;
@@ -15,28 +15,14 @@ ATank::ATank()
 	PrimaryActorTick.bCanEverTick = false;
 }
 
-void ATank::AimAt(FVector HitLocation)
-{
-	if (!ensure(TankAimingComponent)) { return; }
-	TankAimingComponent->AimAt(HitLocation, LaunchSpeed);
-}
-
-void ATank::SetAimingComponent(UTankAimingComponent* AimingComponentToSet)
-{
-	if (AimingComponentToSet)
-	{
-		TankAimingComponent = AimingComponentToSet;
-		Barrel = AimingComponentToSet->Barrel;
-	}
-}
-
 void ATank::Fire()
-{
-	if (!ensure(Barrel)) { return; }
+{	
 	bool isReload = (FPlatformTime::Seconds() - LastFireTime) > ReloadTimeInSeconds;
 
 	if (isReload)
 	{
+		Barrel = FindComponentByClass<UTankBarrel>();
+		if (!ensure(Barrel)) { return; }
 		// Spawning projectile at the socet location on the barrel
 		auto Projectile = GetWorld()->SpawnActor<AProjectile>(
 			ProjectileBlueprint,

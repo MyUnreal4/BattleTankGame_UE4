@@ -3,7 +3,9 @@
 #include "TankAIController.h"
 #include "Engine/World.h"
 #include "GameFramework/PlayerController.h"
+#include "TankAimingComponent.h"
 #include "Tank.h"
+
 
 void ATankAIController::BeginPlay()
 {
@@ -30,9 +32,7 @@ void ATankAIController::Tick(float DeltaTime)
 
 void ATankAIController::AimTowardsCrosshair()
 {
-	if (GetPawn())
-	{
-		Cast<ATank>(GetPawn())->AimAt(
+	if (!ensure(GetPawn()->FindComponentByClass<UTankAimingComponent>())) { return; }
+	GetPawn()->FindComponentByClass<UTankAimingComponent>()->AimAt(
 			GetWorld()->GetFirstPlayerController()->GetPawn()->GetActorLocation());
-	}
 }
