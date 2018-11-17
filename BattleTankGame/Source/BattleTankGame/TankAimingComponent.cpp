@@ -29,7 +29,7 @@ void UTankAimingComponent::AimAt(FVector WorldSpaceAim) const
 		OutLaunchVelocity,
 		StartLocation,
 		WorldSpaceAim,
-		LaunchSpeed,
+		Cast<ATank>(GetOwner())->LaunchSpeed,
 		false,
 		0,
 		0,
@@ -56,6 +56,29 @@ void UTankAimingComponent::Initialise(UTankBarrel * BarrelToSet, UTankTurret * T
 	if (TurretToSet)
 	{
 		Turret = TurretToSet;
+	}
+}
+
+void UTankAimingComponent::Fire()
+{
+	bool isReload = (FPlatformTime::Seconds() - LastFireTime) >
+														Cast<ATank>(GetOwner())->ReloadTimeInSeconds;
+	if (isReload)
+	{
+		if (!ensure(Barrel)) { return; }
+		// Spawning projectile at the socet location on the barrel
+		auto Projectile = GetWorld()->SpawnActor<AProjectile>(
+			ProjectileBlueprint,
+			Barrel->GetSocketLocation(FName("Projectile")),
+			Barrel->GetSocketRotation(FName("Projectile"))
+			);
+		Projectile->LaunchProjectile(Cast<ATank>(GetOwner())->LaunchSpeed);
+		Firing.Broadcast();
+		LastFireTime = FPlatformTime::Seconds();
+	}
+	else
+	{
+		Reloading.Broadcast();
 	}
 }
 

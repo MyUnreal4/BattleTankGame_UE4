@@ -4,10 +4,12 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include "Projectile.h"
 #include "TankAimingComponent.generated.h"
 
-//Enumerations
+DECLARE_DYNAMIC_MULTICAST_DELEGATE (FAimingState);
 
+//Enumerations
 UENUM()
 enum class EFiringState : uint8
 {
@@ -26,22 +28,25 @@ class BATTLETANKGAME_API UTankAimingComponent : public UActorComponent
 	GENERATED_BODY()
 
 public:
-	// Sets default values for this component's properties
 	UTankAimingComponent();
-	// Called every frame
-	void AimAt(FVector WorldSpaceAim) const;
+	UPROPERTY(EditDefaultsOnly, Category = Setup)
+	TSubclassOf<AProjectile> ProjectileBlueprint; //Alternative UClass* is NOT safe
+	void AimAt(FVector WorldSpaceAim) const;// Called every frame
+	void Fire();
+	UPROPERTY(BlueprintAssignable)
+	FAimingState Firing;
+	UPROPERTY(BlueprintAssignable)
+	FAimingState Reloading;
+
+protected:
+	UTankBarrel* Barrel = nullptr;
+	UPROPERTY(BlueprintReadOnly, Category = State)
+	EFiringState FiringState = EFiringState::Aiming;
 	UFUNCTION(BlueprintCallable, Category = Setup)
 	void Initialise(UTankBarrel* BarrelToSet, UTankTurret* TurretToSet);
-	UTankBarrel* Barrel = nullptr;
-
+	
 private:
 	UTankTurret* Turret = nullptr;
 	void MoveBarrelTowards(FVector AimDirection) const;
-	UPROPERTY(EditDefaultsOnly, Category = Firing)//TODO Two copies of this parameter
-	float LaunchSpeed = 4000.0f;
-
-protected:
-
-	UPROPERTY(BlueprintReadOnly, Category = State)
-	EFiringState FiringState = EFiringState::Aiming;
+	double LastFireTime = 0.0;
 };

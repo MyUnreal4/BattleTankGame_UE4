@@ -2,11 +2,7 @@
 
 #include "Tank.h"
 #include "TankAimingComponent.h"
-#include "TankBarrel.h"
 #include "Engine/World.h"
-#include "Projectile.h"
-
-class UTankTurret;
 
 // Sets default values
 ATank::ATank()
@@ -17,26 +13,7 @@ ATank::ATank()
 
 void ATank::Fire()
 {	
-	bool isReload = (FPlatformTime::Seconds() - LastFireTime) > ReloadTimeInSeconds;
-
-	if (isReload)
-	{
-		Barrel = FindComponentByClass<UTankBarrel>();
-		if (!ensure(Barrel)) { return; }
-		// Spawning projectile at the socet location on the barrel
-		auto Projectile = GetWorld()->SpawnActor<AProjectile>(
-			ProjectileBlueprint,
-			Barrel->GetSocketLocation(FName("Projectile")),
-			Barrel->GetSocketRotation(FName("Projectile"))
-			);
-		Projectile->LaunchProjectile(LaunchSpeed);
-		FiringEvent();
-		LastFireTime = FPlatformTime::Seconds();
-	}
-	else
-	{
-		ReloadingEvent();
-	}
+	FindComponentByClass<UTankAimingComponent>()->Fire();
 }
 
 // Called when the game starts or when spawned
