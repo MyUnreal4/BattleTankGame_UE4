@@ -13,7 +13,9 @@ ATank::ATank()
 
 void ATank::Fire()
 {	
-	FindComponentByClass<UTankAimingComponent>()->Fire();
+	auto AimingComponent = FindComponentByClass<UTankAimingComponent>();
+	if (!ensure(AimingComponent)) { return; }
+	AimingComponent->Fire();
 }
 
 // Called when the game starts or when spawned
