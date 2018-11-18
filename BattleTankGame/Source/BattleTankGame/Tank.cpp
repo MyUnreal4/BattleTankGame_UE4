@@ -18,6 +18,13 @@ void ATank::Fire()
 	AimingComponent->Fire();
 }
 
+void ATank::AimAt(FVector WorldSpaceAim) const
+{
+	auto AimingComponent = FindComponentByClass<UTankAimingComponent>();
+	if (!ensure(AimingComponent)) { return; }
+	AimingComponent->AimAt(WorldSpaceAim);
+}
+
 // Called when the game starts or when spawned
 void ATank::BeginPlay()
 {

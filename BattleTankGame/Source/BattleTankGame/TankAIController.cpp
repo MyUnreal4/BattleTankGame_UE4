@@ -31,8 +31,7 @@ void ATankAIController::Tick(float DeltaTime)
 
 void ATankAIController::AimTowardsCrosshair()
 {
-	if (!ensure(GetPawn()->FindComponentByClass<UTankAimingComponent>())) { return; }
+	if (!ensure(GetPawn())) { return; }
 
-	GetPawn()->FindComponentByClass<UTankAimingComponent>()->AimAt(
-			GetWorld()->GetFirstPlayerController()->GetPawn()->GetActorLocation());
+	Cast<ATank>(GetPawn())->AimAt(GetWorld()->GetFirstPlayerController()->GetPawn()->GetActorLocation());
 }

@@ -65,7 +65,7 @@ void UTankAimingComponent::Fire()
 														Cast<ATank>(GetOwner())->ReloadTimeInSeconds;
 	if (isReload)
 	{
-		if (!ensure(Barrel)) { return; }
+		if (!ensure(Barrel && ProjectileBlueprint)) { return; }
 		// Spawning projectile at the socet location on the barrel
 		auto Projectile = GetWorld()->SpawnActor<AProjectile>(
 			ProjectileBlueprint,

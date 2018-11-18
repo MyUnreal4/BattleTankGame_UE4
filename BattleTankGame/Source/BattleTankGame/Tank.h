@@ -16,6 +16,7 @@ public:
 	ATank();
 	UFUNCTION(BlueprintCallable, Category = Setup)
 	void Fire();
+	void AimAt(FVector WorldSpaceAim) const;
 
 protected:
 	// Called when the game starts or when spawned
